@@ -1,16 +1,21 @@
 // lib/session.ts
 
-export const getCurrentUser = (): string | null => {
-  if (typeof window === 'undefined') return null;
-  return localStorage.getItem('username');
+// Holt den aktuellen Benutzernamen
+export const getUsername = (): string => {
+  return localStorage.getItem('energiekrieg_user') || '';
 };
 
-export const setCurrentUser = (username: string) => {
-  if (typeof window === 'undefined') return;
-  localStorage.setItem('username', username);
+// Speichert den Benutzernamen (z. B. beim Login)
+export const setUsername = (name: string) => {
+  localStorage.setItem('energiekrieg_user', name);
 };
 
-export const logoutUser = () => {
-  if (typeof window === 'undefined') return;
-  localStorage.removeItem('username');
+// Entfernt den Benutzernamen (z. B. beim Logout)
+export const clearUsername = () => {
+  localStorage.removeItem('energiekrieg_user');
+};
+
+// Prüft, ob ein Benutzer eingeloggt ist
+export const isLoggedIn = (): boolean => {
+  return !!getUsername();
 };
