@@ -69,7 +69,11 @@ const classic = all
     image: `/cards/${idx.toString().padStart(3, "0")}.jpg`,
     class: mapClass(c.cardClass),
     rarity: mapRarity(c.rarity),
-   mechanics: c.mechanics ? c.mechanics.map((m) => mapMech(m.name)) : undefined,
+   mechanics: Array.isArray(c.mechanics)
+  ? c.mechanics
+      .map((m) => (m.name ? mapMech(m.name) : null)) // nur wenn name existiert
+      .filter((x): x is string => x !== null)      // leere Einträge entfernen
+  : undefined,
   }));
 
   const banner =
