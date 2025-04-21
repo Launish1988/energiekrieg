@@ -1,30 +1,15 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import GameBoard from "@/components/GameBoard";
-import { allCards } from "@/lib/cards";
 import { useMatchFlow } from "@/lib/matchflow";
+import { DeckStore } from "@/lib/decks";
+import { allCards } from "@/lib/cards";
 import type { CardData } from "@/components/Card";
+import { getCurrentUser } from "@/lib/session";
 
 /* --------------------------------------------------
- * Helper: read saved decks (localStorage → up to 3)
+ * Helper: shuffle
  * -------------------------------------------------- */
-function loadLocalDeck(idx = 0): CardData[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = localStorage.getItem("decks");
-    if (!raw) return [];
-    const arr = JSON.parse(raw);
-    const selected = arr[idx];
-    if (!selected) return [];
-    return selected.cards
-      .map((id: string) => allCards.find((c) => c.id === id))
-      .filter(Boolean) as CardData[];
-  } catch (e) {
-    console.error("Could not parse decks from LS", e);
-    return [];
-  }
-}
-
-/* simple in‑place shuffle */
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -34,49 +19,48 @@ function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
-/* Fallback‑Deck: die ersten 30 Karten aus allCards */
-const fallbackDeck: CardData[] = allCards.slice(0, 30) as CardData[];
-
 export default function MatchPage() {
-  /* ---- deck setup (once on mount) ---- */
-  const [ready, setReady] = useState(false);
-  const [deckP1, setDeckP1] = useState<CardData[]>([]);
-  const [deckP2, setDeckP2] = useState<CardData[]>([]);
+  const router = useRouter();
+  const { query } = router;
 
+  /* ---- ensure login ---- */
   useEffect(() => {
-    // läuft nur im Browser
-    const d1 = loadLocalDeck(0);
-    const d2 = loadLocalDeck(1);
-    setDeckP1(d1.length === 30 ? shuffle(d1) : shuffle(fallbackDeck));
-    setDeckP2(d2.length === 30 ? shuffle(d2) : shuffle(fallbackDeck));
-    setReady(true);
-  }, []);
+    if (!getCurrentUser()) router.replace("/login");
+  }, [router]);
+
+  /* ---- deck selection ---- */
+  const deckIdx = Number(query.deckIdx ?? 0); // ?deckIdx=1 to pick second deck
+  const decks = DeckStore.getAll();
+  const selected = decks[deckIdx]?.cards ?? [];
+  const deckP1: CardData[] = selected
+    .map((id) => allCards.find((c) => c.id === id))
+    .filter(Boolean) as CardData[];
+
+  // Simple mirror match if no second player yet
+  const deckP2: CardData[] = shuffle(deckP1);
+
+  if (deckP1.length !== 30) {
+    return (
+      <div className="p-4 text-center text-red-400">
+        Kein gültiges Deck gefunden. Bitte erst im Deck‑Builder eines mit 30 Karten
+        speichern.
+      </div>
+    );
+  }
 
   /* ---- game logic ---- */
-  const {
-    state,
-    playCard,
-    attack,
-    endTurn,
-  } = useMatchFlow({
-    deck1: deckP1,
+  const { state, playCard, attack, endTurn } = useMatchFlow({
+    deck1: shuffle(deckP1),
     deck2: deckP2,
   });
-
-  if (!ready) return <p className="p-4">Lade&nbsp;Deck&nbsp;…</p>;
 
   return (
     <main className="mx-auto flex max-w-4xl flex-col gap-4 p-4">
       <h1 className="text-center text-2xl font-bold text-yellow-400">
-        Energiekrieg ⚡ – 1&nbsp;vs&nbsp;1‑Match
+        Energiekrieg ⚡ – Match
       </h1>
 
-      <GameBoard
-        state={state}
-        playCard={playCard}
-        attack={attack}
-        endTurn={endTurn}
-      />
+      <GameBoard state={state} playCard={playCard} attack={attack} endTurn={endTurn} />
     </main>
   );
 }
