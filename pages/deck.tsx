@@ -1,65 +1,78 @@
-import React, { useState } from 'react';
-import { allCards, CardData } from '../lib/cards';
-import styles from '../styles/globals.css';
-
-const MAX_DECK_SIZE = 30;
+import React, { useState, useEffect } from 'react';
+import { getAllCards } from '@/lib/cards';
+import { saveDeck, getDeckByUser } from '@/lib/decks';
 
 const DeckBuilder = () => {
+  const [availableCards, setAvailableCards] = useState<any[]>([]);
+  const [selectedCards, setSelectedCards] = useState<any[]>([]);
   const [deckName, setDeckName] = useState('');
-  const [deck, setDeck] = useState<CardData[]>([]);
+  const [username, setUsername] = useState('');
 
-  const toggleCardInDeck = (card: CardData) => {
-    const exists = deck.find(c => c.id === card.id);
+  useEffect(() => {
+    const user = localStorage.getItem('energiekrieg_user') || '';
+    setUsername(user);
 
-    if (exists) {
-      setDeck(deck.filter(c => c.id !== card.id));
-    } else if (deck.length < MAX_DECK_SIZE) {
-      setDeck([...deck, card]);
+    const cards = getAllCards(); // Importierte Karten
+    setAvailableCards(cards);
+
+    const savedDeck = getDeckByUser(user);
+    if (savedDeck) {
+      setSelectedCards(savedDeck.cards);
+      setDeckName(savedDeck.name);
+    }
+  }, []);
+
+  const toggleCard = (card: any) => {
+    const alreadySelected = selectedCards.find((c) => c.id === card.id);
+    if (alreadySelected) {
+      setSelectedCards((prev) => prev.filter((c) => c.id !== card.id));
+    } else {
+      if (selectedCards.length < 30) {
+        setSelectedCards((prev) => [...prev, card]);
+      } else {
+        alert('Du kannst maximal 30 Karten im Deck haben!');
+      }
     }
   };
 
-  const handleSave = () => {
-    if (deck.length !== MAX_DECK_SIZE || !deckName) {
-      alert('Bitte gib einen Namen ein und wähle genau 30 Karten.');
+  const handleSaveDeck = () => {
+    if (!deckName || selectedCards.length !== 30) {
+      alert('Bitte gib einen Namen ein und wähle genau 30 Karten aus.');
       return;
     }
 
-    const savedDecks = JSON.parse(localStorage.getItem('decks') || '[]');
-    if (savedDecks.length >= 3) {
-      alert('Du kannst nur 3 Decks speichern.');
-      return;
-    }
-
-    savedDecks.push({ name: deckName, cards: deck });
-    localStorage.setItem('decks', JSON.stringify(savedDecks));
+    saveDeck(username, deckName, selectedCards);
     alert('Deck gespeichert!');
-    setDeck([]);
-    setDeckName('');
   };
 
   return (
     <div className="deck-builder">
-      <h1>Deck erstellen</h1>
+      <h1>🛠 Deck erstellen</h1>
+
       <input
         type="text"
-        placeholder="Deckname"
+        placeholder="Name deines Decks"
         value={deckName}
-        onChange={e => setDeckName(e.target.value)}
+        onChange={(e) => setDeckName(e.target.value)}
       />
-      <p>{deck.length} / {MAX_DECK_SIZE} Karten</p>
+
       <div className="card-pool">
-        {allCards.map(card => (
+        {availableCards.map((card) => (
           <div
             key={card.id}
-            className={`card-tile ${deck.find(c => c.id === card.id) ? 'selected' : ''}`}
-            onClick={() => toggleCardInDeck(card)}
+            className={`card-tile ${selectedCards.find((c) => c.id === card.id) ? 'selected' : ''}`}
+            onClick={() => toggleCard(card)}
           >
-            <p>{card.name}</p>
-            <small>Kosten: {card.cost}</small>
+            <strong>{card.name}</strong>
+            <p>{card.cost} Mana</p>
+            <p>{card.attack}/{card.health}</p>
           </div>
         ))}
       </div>
-      <button onClick={handleSave}>Deck speichern</button>
+
+      <p>Ausgewählt: {selectedCards.length} / 30</p>
+
+      <button onClick={handleSaveDeck}>💾 Deck speichern</button>
     </div>
   );
 };
