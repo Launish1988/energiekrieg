@@ -1,22 +1,30 @@
-export const sampleDecks = [
-  {
-    id: 'deck1',
-    name: 'Naturruf des Anfangs',
-    class: 'Naturrufer',
-    cards: [
-      '001', '001', '002', '002', '003', '003', '004', '004', '005', '005',
-      '006', '006', '007', '007', '008', '008', '009', '009', '010', '010',
-      '011', '011', '012', '012', '013', '013', '014', '014', '015', '015'
-    ]
-  },
-  {
-    id: 'deck2',
-    name: 'Sturmgewitter',
-    class: 'Sturmbeschwörer',
-    cards: [
-      '016', '016', '017', '017', '018', '018', '019', '019', '020', '020',
-      '021', '021', '022', '022', '023', '023', '024', '024', '025', '025',
-      '026', '026', '027', '027', '028', '028', '029', '029', '030', '030'
-    ]
-  }
-];
+// lib/decks.ts
+
+import { CardData } from './cards';
+
+export type Deck = {
+  name: string;
+  cards: CardData[];
+};
+
+// Holt den aktuellen Benutzernamen aus localStorage
+export const getCurrentUser = (): string => {
+  return localStorage.getItem('energiekrieg_user') || '';
+};
+
+// Holt ein gespeichertes Deck für den aktuellen Benutzer
+export const getDeckByUser = (user: string): Deck | null => {
+  const raw = localStorage.getItem(`deck_${user}`);
+  return raw ? JSON.parse(raw) : null;
+};
+
+// Speichert ein Deck für den aktuellen Benutzer
+export const saveDeck = (user: string, name: string, cards: CardData[]) => {
+  const deck: Deck = { name, cards };
+  localStorage.setItem(`deck_${user}`, JSON.stringify(deck));
+};
+
+// Löscht ein gespeichertes Deck
+export const deleteDeck = (user: string) => {
+  localStorage.removeItem(`deck_${user}`);
+};
