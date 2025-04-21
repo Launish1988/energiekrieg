@@ -34,7 +34,7 @@ export interface CardData {
   mechanics?: string[];
 }
 
-const OUT = path.resolve("src/lib/cards.ts");
+const OUT = path.resolve("lib/cards.ts");
 const HS_JSON =
   "https://api.hearthstonejson.com/v1/25770/enUS/cards.collectible.json"; // Classic Patch 25770
 
