@@ -1,64 +1,70 @@
-// pages/login.tsx
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import Image from "next/image";
+import { login, getCurrentUser } from "@/lib/session";
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/router';
-import Image from 'next/image';
-import { setCurrentUser } from '../lib/session';
-
-const Login = () => {
+export default function LoginPage() {
   const router = useRouter();
-  const [username, setUsername] = useState('');
-  const [selectedDeck, setSelectedDeck] = useState('default');
+  const [username, setUsername] = useState<string>("");
+  const [klass, setKlass] = useState<string>("warrior");
 
-  const handleLogin = () => {
-    if (!username) return;
+  /* Bereits eingeloggt? → Home */
+  useEffect(() => {
+    const u = getCurrentUser();
+    if (u) router.replace("/");
+  }, [router]);
 
-    // Save in localStorage
-    localStorage.setItem('energiekrieg_user', username);
-    localStorage.setItem('energiekrieg_deck', selectedDeck);
-
-    // Save in session helper
-    setCurrentUser(username);
-
-    // Set cookie for middleware
-    document.cookie = `username=${username}; path=/`;
-
-    // Redirect
-    router.push('/');
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const name = username.trim();
+    if (!name) {
+      alert("Bitte Benutzername eingeben");
+      return;
+    }
+    // store username (LS + Cookie)
+    login(name);
+    // optionale Klassen‑Wahl in LS merken (für spätere Hero‑Skin)
+    if (typeof window !== "undefined") localStorage.setItem("energiekrieg_class", klass);
+    router.replace("/");
   };
 
   return (
-    <div className="login-container">
-      <Image src="/logo.png" alt="Energiekrieg Logo" width={200} height={200} />
-      <h1>Energiekrieg</h1>
+    <main className="flex min-h-screen flex-col items-center justify-center gap-6 bg-gradient-to-b from-slate-900 to-slate-800 p-4 text-center">
+      <Image src="/logo.png" alt="Energiekrieg" width={180} height={180} priority />
+      <h1 className="text-3xl font-bold text-yellow-400">Energiekrieg</h1>
 
-      <input
-        type="text"
-        placeholder="Dein Benutzername"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        className="login-input"
-      />
+      <form onSubmit={handleSubmit} className="flex flex-col items-center gap-4">
+        <input
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Benutzername"
+          className="w-60 rounded border border-slate-600 bg-slate-800 px-3 py-2 text-white focus:outline-none"
+        />
 
-      <select
-        value={selectedDeck}
-        onChange={(e) => setSelectedDeck(e.target.value)}
-        className="deck-select"
-      >
-        <option value="default">🛡 Klingenmeister</option>
-        <option value="druid">🌿 Naturrufer</option>
-        <option value="mage">🔥 Elementarwirker</option>
-        <option value="priest">🖤 Schattenwirker</option>
-        <option value="hunter">🏹 Waldhüter</option>
-        <option value="paladin">⚔ Lichtwächter</option>
-        <option value="warlock">💀 Seelenmeister</option>
-        <option value="shaman">🌩 Sturmbeschwörer</option>
-        <option value="rogue">🗡 Klingenläufer</option>
-      </select>
+        <select
+          value={klass}
+          onChange={(e) => setKlass(e.target.value)}
+          className="w-60 rounded border border-slate-600 bg-slate-800 px-3 py-2 text-white focus:outline-none"
+        >
+          <option value="warrior">🛡 Klingenmeister</option>
+          <option value="druid">🌿 Naturrufer</option>
+          <option value="mage">🔥 Elementarwirker</option>
+          <option value="priest">🖤 Schattenwirker</option>
+          <option value="hunter">🏹 Waldhüter</option>
+          <option value="paladin">✨ Lichtwächter</option>
+          <option value="warlock">💀 Seelenmeister</option>
+          <option value="shaman">🌩 Sturmbeschwörer</option>
+          <option value="rogue">🗡 Klingenläufer</option>
+        </select>
 
-      <button onClick={handleLogin} className="login-button">🔓 Einloggen & Loslegen</button>
-    </div>
+        <button
+          type="submit"
+          className="w-60 rounded bg-blue-700 px-4 py-2 text-lg font-semibold text-white shadow hover:bg-blue-600"
+        >
+          🔓 Einloggen & Loslegen
+        </button>
+      </form>
+    </main>
   );
-};
-
-export default Login;
+}
