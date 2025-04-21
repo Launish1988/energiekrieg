@@ -183,6 +183,174 @@ export const allCards: CardData[] = [
     rarity: 'rare',
     mechanics: ['charge']
   }
-  // Fortsetzung folgt (IDs 016–030)
+   {
+    id: '016',
+    name: 'Runenwandler',
+    cost: 3,
+    attack: 3,
+    health: 3,
+    description: 'Beim Ausspielen: Erhält +1 Angriff.',
+    image: '/cards/016.jpg',
+    class: 'Klingenläufer',
+    rarity: 'common',
+    mechanics: ['battlecry']
+  },
+  {
+    id: '017',
+    name: 'Windfokus',
+    cost: 1,
+    attack: 0,
+    health: 0,
+    description: 'Ziehe eine Karte.',
+    image: '/cards/017.jpg',
+    class: 'Sturmbeschwörer',
+    rarity: 'common',
+    mechanics: ['draw']
+  },
+  {
+    id: '018',
+    name: 'Seelenschmied',
+    cost: 4,
+    attack: 5,
+    health: 4,
+    description: '',
+    image: '/cards/018.jpg',
+    class: 'Seelenmeister',
+    rarity: 'common'
+  },
+  {
+    id: '019',
+    name: 'Lichtschlag',
+    cost: 4,
+    attack: 0,
+    health: 0,
+    description: 'Verursacht 6 Schaden.',
+    image: '/cards/019.jpg',
+    class: 'Elementarwirker',
+    rarity: 'common'
+  },
+  {
+    id: '020',
+    name: 'Schutzgeist',
+    cost: 3,
+    attack: 1,
+    health: 6,
+    description: 'Schild',
+    image: '/cards/020.jpg',
+    class: 'Lichtwächter',
+    rarity: 'common',
+    mechanics: ['taunt']
+  },
+  {
+    id: '021',
+    name: 'Wilder Wächter',
+    cost: 2,
+    attack: 2,
+    health: 2,
+    description: 'Ruhelose Naturgewalt.',
+    image: '/cards/021.jpg',
+    class: 'Waldhüter',
+    rarity: 'common'
+  },
+  {
+    id: '022',
+    name: 'Glefe der Schatten',
+    cost: 5,
+    attack: 5,
+    health: 6,
+    description: '',
+    image: '/cards/022.jpg',
+    class: 'Schattenwirker',
+    rarity: 'rare'
+  },
+  {
+    id: '023',
+    name: 'Sturmruf',
+    cost: 2,
+    attack: 0,
+    health: 0,
+    description: 'Verursacht 2 Schaden an allen Feinden.',
+    image: '/cards/023.jpg',
+    class: 'Sturmbeschwörer',
+    rarity: 'epic'
+  },
+  {
+    id: '024',
+    name: 'Heilende Woge',
+    cost: 3,
+    attack: 0,
+    health: 0,
+    description: 'Stellt 6 Leben wieder her.',
+    image: '/cards/024.jpg',
+    class: 'Lichtwächter',
+    rarity: 'common'
+  },
+  {
+    id: '025',
+    name: 'Dämmerungswächter',
+    cost: 4,
+    attack: 4,
+    health: 4,
+    description: '',
+    image: '/cards/025.jpg',
+    class: 'Neutral',
+    rarity: 'common'
+  },
+  {
+    id: '026',
+    name: 'Geisterzunge',
+    cost: 1,
+    attack: 0,
+    health: 0,
+    description: 'Erhält +1 Angriff.',
+    image: '/cards/026.jpg',
+    class: 'Seelenmeister',
+    rarity: 'common'
+  },
+  {
+    id: '027',
+    name: 'Panthergeist',
+    cost: 3,
+    attack: 4,
+    health: 2,
+    description: '',
+    image: '/cards/027.jpg',
+    class: 'Waldhüter',
+    rarity: 'common'
+  },
+  {
+    id: '028',
+    name: 'Flammenzorn',
+    cost: 4,
+    attack: 0,
+    health: 0,
+    description: 'Verursacht 2 Schaden an allen Dienern.',
+    image: '/cards/028.jpg',
+    class: 'Elementarwirker',
+    rarity: 'epic'
+  },
+  {
+    id: '029',
+    name: 'Wutklinge',
+    cost: 5,
+    attack: 7,
+    health: 4,
+    description: '',
+    image: '/cards/029.jpg',
+    class: 'Klingenläufer',
+    rarity: 'rare'
+  },
+  {
+    id: '030',
+    name: 'Donnerklaue',
+    cost: 6,
+    attack: 6,
+    health: 7,
+    description: 'Schild',
+    image: '/cards/030.jpg',
+    class: 'Sturmbeschwörer',
+    rarity: 'rare',
+    mechanics: ['taunt']
+  }
 ];
 
