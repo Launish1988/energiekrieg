@@ -1,0 +1,35 @@
+name: Generate cards.ts
+
+on:
+  workflow_dispatch:        # manueller Start
+  push:
+    paths:
+      - "scripts/**"        # läuft auch, wenn du im scripts‑Ordner etwas änderst
+
+permissions:
+  contents: write           # darf ins Repo committen
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: npm install --global tsx
+
+      - name: Generate cards file
+        run: tsx scripts/generateCards.ts
+
+      - name: Commit result
+        run: |
+          git config user.name  "cards-bot"
+          git config user.email "actions@github.com"
+          git add lib/cards.ts
+          git commit -m "ci: regenerate cards.ts" || echo "nothing to commit"
+
+      - name: Push
+        run: git push
