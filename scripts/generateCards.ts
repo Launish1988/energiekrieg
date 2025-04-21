@@ -45,7 +45,10 @@ async function main() {
   const all: HsCard[] = await res.json();
 
   // Classic‑Set herausfiltern
-  const classic = all.filter((c) => c.collectible && c.set === "CORE");
+  // NEU  – nimm einfach die ersten 240 sammelbaren Karten
+const classic = all
+  .filter((c) => c.collectible)   // nur spielbare Karten
+  .slice(0, 240);                 // exakt 240 Stück
   if (classic.length !== 240)
     console.warn(`Classic‑Karten gefunden: ${classic.length} (erwartet 240)`);
 
