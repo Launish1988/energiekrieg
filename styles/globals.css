@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #1c1c1c;
+  background-color: #1d1c1c;
   color: white;
   padding: 20px;
   min-height: 100vh;
@@ -16,7 +16,7 @@
 
 .board-center {
   border: 2px dashed #666;
-  border-radius: 8px;
+  border-radius: 6px;
   width: 100%;
   height: 180px;
   margin: 20px 0;
@@ -28,4 +28,68 @@
   justify-content: center;
   gap: 12px;
   margin-top: 20px;
+}
+
+/* ------------------------------------------- */
+/* Erweiterung: Deck Builder Styling */
+.deck-builder {
+  padding: 40px;
+  background: #121212;
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.deck-builder input {
+  padding: 10px;
+  font-size: 16px;
+  width: 300px;
+  border: none;
+  border-radius: 8px;
+  outline: none;
+}
+
+.card-pool {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 16px;
+  width: 100%;
+  max-width: 900px;
+}
+
+.card-tile {
+  background: #2a2a2a;
+  padding: 10px;
+  border-radius: 10px;
+  text-align: center;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.card-tile:hover {
+  border-color: #888;
+}
+
+.card-tile.selected {
+  border-color: #00ffcc;
+  background-color: #1b1b1b;
+}
+
+.deck-builder button {
+  padding: 12px 24px;
+  font-size: 16px;
+  background: #00cc99;
+  color: black;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.deck-builder button:hover {
+  background: #00ffaa;
 }
