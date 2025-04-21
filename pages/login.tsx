@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
+import { setCurrentUser } from '../lib/session';
 
 const Login = () => {
   const router = useRouter();
@@ -11,15 +12,24 @@ const Login = () => {
 
   const handleLogin = () => {
     if (!username) return;
+
+    // Save in localStorage
     localStorage.setItem('energiekrieg_user', username);
     localStorage.setItem('energiekrieg_deck', selectedDeck);
+
+    // Save in session helper
+    setCurrentUser(username);
+
+    // Set cookie for middleware
+    document.cookie = `username=${username}; path=/`;
+
+    // Redirect
     router.push('/');
   };
 
   return (
     <div className="login-container">
       <Image src="/logo.png" alt="Energiekrieg Logo" width={200} height={200} />
-
       <h1>Energiekrieg</h1>
 
       <input
@@ -35,7 +45,7 @@ const Login = () => {
         onChange={(e) => setSelectedDeck(e.target.value)}
         className="deck-select"
       >
-        <option value="default">🗡 Klingenmeister</option>
+        <option value="default">🛡 Klingenmeister</option>
         <option value="druid">🌿 Naturrufer</option>
         <option value="mage">🔥 Elementarwirker</option>
         <option value="priest">🖤 Schattenwirker</option>
