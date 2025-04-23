@@ -68,7 +68,7 @@ export class ManaTimer {
   this.durationMs  = durationSeconds * 1_000;   // <- wieder beschreibbar machen
   this.remainingMs = this.durationMs;
   }
-
+ }
   /** Millisekunden verbleibend (float). */
   getRemainingMs(): number {
     if (this.startTs) {
