@@ -1,9 +1,5 @@
 /**
  * Präziser, pausierbarer Countdown-Timer (Millisekunden-genau).
- *
- * ✔ On-Expire-Callback
- * ✔ Tick-Callback (UI-Updates)
- * ✔ start / pause / resume / stop / reset
  */
 export class ManaTimer {
   private durationMs: number;
@@ -28,9 +24,9 @@ export class ManaTimer {
     this.tickInterval = opts.tickEveryMs ?? 500;
   }
 
-  /* -------- public API -------- */
+  /* ---------- Steuerung ---------- */
   start() {
-    if (this.timerId) return;                 // bereits laufend
+    if (this.timerId) return;
     this.startTs = Date.now();
     this.timerId = setTimeout(() => this.handleExpire(), this.remainingMs);
     if (this.onTick) {
@@ -63,31 +59,16 @@ export class ManaTimer {
     this.startTs = null;
   }
 
-  /** ⬅️ Hier endet reset korrekt ⬇︎ */
+  /** Reset auf neue Dauer (oder ursprüngliche). */
   reset(durationSeconds?: number) {
     this.stop();
     if (durationSeconds) {
-      this.durationMs  = durationSeconds * 1_000;
+      this.durationMs  = durationSeconds * 1_000; // ← ZWEI separate Zuweisungen
       this.remainingMs = this.durationMs;
     }
   }
 
-  /** Millisekunden verbleibend (float). */
+  /* ---------- Abfragen ---------- */
   getRemainingMs(): number {
-    if (this.startTs) {
-      return Math.max(0, this.remainingMs - (Date.now() - this.startTs));
-    }
-    return this.remainingMs;
-  }
-
-  /** Ganze Sekunden (abgerundet) verbleibend. */
-  getRemainingSeconds(): number {
-    return Math.floor(this.getRemainingMs() / 1_000);
-  }
-
-  /* -------- internal -------- */
-  private handleExpire() {
-    this.stop();
-    this.onExpire();
-  }
-}
+    return this.startTs
+      ? Math.max(0, this.remaining
