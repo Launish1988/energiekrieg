@@ -1,7 +1,6 @@
 // pages/login.tsx
 import { useState, FormEvent } from "react";
 import { useRouter } from "next/router";
-import Image from "next/image";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -12,13 +11,11 @@ export default function LoginPage() {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setError("");
-
     const res = await fetch("/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     });
-
     if (res.ok) {
       router.push("/");
     } else {
@@ -34,54 +31,41 @@ export default function LoginPage() {
     >
       <div className="bg-black bg-opacity-60 p-8 rounded-lg max-w-sm w-full text-center space-y-6">
         {/* Logo */}
-        <div>
-          <Image
-            src="/images/login-logo.png"
-            alt="Energiekrieg Logo"
-            width={200}
-            height={200}
-            className="mx-auto"
-          />
-        </div>
+        <img
+          src="/images/login-logo.png"
+          alt="Energiekrieg Logo"
+          className="mx-auto mb-4 w-64"
+        />
 
-        {/* Fehlermeldung */}
-        {error && <p className="text-red-400">{error}</p>}
-
-        {/* Formular */}
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-gold font-semibold mb-1">E-MAIL</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              placeholder="E-Mail"
-              className="w-full px-3 py-2 rounded bg-white bg-opacity-20 placeholder-gold text-white"
-            />
-          </div>
-          <div>
-            <label className="block text-gold font-semibold mb-1">PASSWORD</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              placeholder="Password"
-              className="w-full px-3 py-2 rounded bg-white bg-opacity-20 placeholder-gold text-white"
-            />
-          </div>
+          <input
+            type="email"
+            placeholder="E-Mail"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full p-2 rounded text-black"
+            required
+          />
+          <input
+            type="password"
+            placeholder="Passwort"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full p-2 rounded text-black"
+            required
+          />
+          {error && <p className="text-red-400">{error}</p>}
           <button
             type="submit"
-            className="w-full py-2 bg-gold text-black font-bold rounded hover:bg-gold-dark"
+            className="w-full py-2 bg-yellow-600 hover:bg-yellow-700 rounded font-bold"
           >
             LOG IN
           </button>
         </form>
 
-        <p className="text-white">
+        <p className="text-sm">
           Noch keinen Account?{" "}
-          <a href="/register" className="underline">
+          <a href="/register" className="underline text-yellow-500">
             Account erstellen
           </a>
         </p>
