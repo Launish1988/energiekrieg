@@ -27,47 +27,46 @@ export default function LoginPage() {
   return (
     <div
       className="relative w-full h-screen bg-cover bg-center"
-      style={{ backgroundImage: 'url("/images/login-bg.jpg")' }}
+      style={{
+        backgroundImage: 'url("/images/login-bg.jpg")',
+      }}
     >
-      <form
-        onSubmit={handleSubmit}
-        className="absolute inset-0 flex flex-col items-center justify-center"
-      >
-        {/* E-Mail-Feld */}
+      <form onSubmit={handleSubmit} className="relative w-full h-full">
+        {/*
+          Input- und Button-Flächen werden absolut über
+          die Grafik gelegt. Du musst nur noch spielend
+          sehen, wo E-Mail / Passwort / Login / Create Account
+          auf dem Bild stehen.
+        */}
+
+        {/* E-Mail */}
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="E-Mail"
+          // kein placeholder, das Label sitzt ja im Bild
+          placeholder=""
           className="
-            mb-4
-            w-80
-            px-3
-            py-2
-            bg-transparent
-            border-2 border-gold-500
-            text-gold-200
-            placeholder-gold-200
-            focus:outline-none
+            absolute 
+            top-[35%] left-1/2 transform -translate-x-1/2
+            w-[70%] max-w-xs h-10
+            bg-transparent text-gold-200
+            border-none focus:outline-none
           "
         />
 
-        {/* Passwort-Feld */}
+        {/* Passwort */}
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="Passwort"
+          placeholder=""
           className="
-            mb-6
-            w-80
-            px-3
-            py-2
-            bg-transparent
-            border-2 border-gold-500
-            text-gold-200
-            placeholder-gold-200
-            focus:outline-none
+            absolute 
+            top-[45%] left-1/2 transform -translate-x-1/2
+            w-[70%] max-w-xs h-10
+            bg-transparent text-gold-200
+            border-none focus:outline-none
           "
         />
 
@@ -75,41 +74,30 @@ export default function LoginPage() {
         <button
           type="submit"
           className="
-            mb-4
-            w-60
-            px-4
-            py-2
-            bg-gold-600
-            text-black
-            font-bold
-            rounded
-            hover:bg-gold-700
+            absolute
+            top-[55%] left-1/2 transform -translate-x-1/2
+            w-[60%] max-w-xs h-12
+            bg-transparent border-none
+            cursor-pointer
           "
-        >
-          LOG IN
-        </button>
+        />
 
         {/* Create-Account-Button */}
         <button
           type="button"
           onClick={() => router.push("/register")}
           className="
-            w-60
-            px-4
-            py-2
-            bg-gold-700
-            text-black
-            font-bold
-            rounded
-            hover:bg-gold-800
+            absolute
+            top-[67%] left-1/2 transform -translate-x-1/2
+            w-[60%] max-w-xs h-12
+            bg-transparent border-none
+            cursor-pointer
           "
-        >
-          CREATE ACCOUNT
-        </button>
+        />
 
-        {/* Fehlermeldung */}
+        {/* (optional) Fehlermeldung unter dem Bild */}
         {error && (
-          <p className="mt-4 text-red-400 font-medium text-center">
+          <p className="absolute top-[80%] left-1/2 transform -translate-x-1/2 text-red-400">
             {error}
           </p>
         )}
