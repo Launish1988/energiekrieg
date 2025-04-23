@@ -11,12 +11,15 @@ export default function LoginPage() {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setError("");
+
     const res = await fetch("/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     });
+
     if (res.ok) {
+      // Erfolgreich eingeloggt → Startseite
       router.push("/");
     } else {
       const data = await res.json();
@@ -29,20 +32,19 @@ export default function LoginPage() {
       className="relative w-full h-screen bg-cover bg-center"
       style={{ backgroundImage: 'url("/images/login-bg.jpg")' }}
     >
-      <form onSubmit={handleSubmit} className="absolute inset-0">
-        {/* E-Mail (Position nach Bild anpassen!) */}
+      <form onSubmit={handleSubmit} className="relative w-full h-full">
+        {/* E-Mail */}
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="
-            absolute
+            absolute 
             top-[35%] left-1/2 transform -translate-x-1/2
             w-[70%] max-w-xs h-10
-            bg-transparent text-white placeholder-transparent
+            bg-transparent text-white
             border-none focus:outline-none
           "
-          placeholder=""
         />
 
         {/* Passwort */}
@@ -51,16 +53,15 @@ export default function LoginPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="
-            absolute
+            absolute 
             top-[45%] left-1/2 transform -translate-x-1/2
             w-[70%] max-w-xs h-10
-            bg-transparent text-white placeholder-transparent
+            bg-transparent text-white
             border-none focus:outline-none
           "
-          placeholder=""
         />
 
-        {/* Log In Button */}
+        {/* Login-Button */}
         <button
           type="submit"
           className="
@@ -72,7 +73,7 @@ export default function LoginPage() {
           "
         />
 
-        {/* Create Account Button */}
+        {/* Create-Account-Button */}
         <button
           type="button"
           onClick={() => router.push("/register")}
@@ -85,7 +86,6 @@ export default function LoginPage() {
           "
         />
 
-        {/* Fehlermeldung */}
         {error && (
           <p className="absolute top-[80%] left-1/2 transform -translate-x-1/2 text-red-400">
             {error}
