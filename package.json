@@ -16,8 +16,8 @@
     "react-dom": "18.2.0",
     "clsx": "^2.1.1",
     "framer-motion": "^12.7.4",
-    "mongodb": "^6.5.0",     // ← hinzugefügt
-    "bcryptjs": "^2.4.3"     // ← hinzugefügt
+    "mongodb": "^6.5.0",     
+    "bcryptjs": "^2.4.3"     
   },
 
   "devDependencies": {
