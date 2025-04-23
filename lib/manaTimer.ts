@@ -64,7 +64,9 @@ export class ManaTimer {
 
   reset(durationSeconds?: number) {
     this.stop();
-    if (durationSeconds) this.remainingMs = this.durationMs = durationSeconds * 1_000;
+    if (durationSeconds) {
+  this.durationMs  = durationSeconds * 1_000;   // <- wieder beschreibbar machen
+  this.remainingMs = this.durationMs;
   }
 
   /** Millisekunden verbleibend (float). */
