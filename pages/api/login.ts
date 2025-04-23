@@ -1,30 +1,28 @@
 // pages/api/login.ts
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getDb } from "@/lib/mongo";
-import { verifyPassword } from "@/lib/auth";
-import cookie from "cookie";
+import { verifyPassword, setLoginCookie } from "@/lib/auth";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   if (req.method !== "POST") return res.status(405).end();
 
   const { email, password } = req.body;
+  if (!email || !password)
+    return res.status(400).json({ msg: "Missing fields" });
+
   const db = await getDb();
-  const user = await db.collection("users").findOne<{ password: string }>({ email });
+  const users = db.collection("users");
+  const user = await users.findOne<{ password: string }>({ email });
 
-  if (!user || !(await verifyPassword(password, user.password))) {
-    return res.status(401).json({ msg: "Invalid credentials" });
-  }
+  if (!user) return res.status(401).json({ msg: "Invalid credentials" });
 
-  // 7-Tage-Session-Cookie
-  res.setHeader(
-    "Set-Cookie",
-    cookie.serialize("username", email, {
-      httpOnly: true,
-      sameSite: "lax",
-      path: "/",
-      maxAge: 60 * 60 * 24 * 7,
-    })
-  );
+  const ok = await verifyPassword(password, user.password);
+  if (!ok) return res.status(401).json({ msg: "Invalid credentials" });
 
+  // ✔ alles richtig – Cookie setzen & Erfolg melden
+  setLoginCookie(res, email);
   return res.status(200).json({ msg: "OK" });
 }
