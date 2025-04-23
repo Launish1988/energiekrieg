@@ -1,16 +1,17 @@
 // pages/login.tsx
 import { useState, FormEvent } from "react";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 export default function LoginPage() {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState("");
+  const router = useRouter();
 
-  async function onSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    setError(null);
+    setError("");
 
     const res = await fetch("/api/login", {
       method: "POST",
@@ -19,79 +20,78 @@ export default function LoginPage() {
     });
 
     if (res.ok) {
-      // bei Erfolg weiter zum Dashboard / Home
+      // bei Erfolg weiterleiten zur Startseite
       router.push("/");
     } else {
-      const { msg } = await res.json();
-      setError(msg || "Login fehlgeschlagen");
+      const data = await res.json();
+      setError(data.msg || "Login fehlgeschlagen");
     }
   }
 
   return (
     <div
-      className="min-h-screen bg-cover bg-center flex items-center justify-center"
-      style={{ backgroundImage: "url(/images/login-bg.jpg)" }}
+      className="min-h-screen flex items-center justify-center bg-cover bg-center"
+      style={{ backgroundImage: `url("/images/login-bg.jpg")` }}
     >
-      <div className="bg-black bg-opacity-60 p-8 rounded-lg max-w-sm w-full text-center">
+      <div className="bg-black bg-opacity-50 p-8 rounded-lg max-w-sm w-full text-center space-y-6">
         {/* Logo */}
-        <img
+        <Image
           src="/images/login-logo.png"
-          alt="Energiekrieg Logo"
-          className="mx-auto mb-6 w-36"
+          alt="Energiekreig Logo"
+          width={300}
+          height={100}
+          className="mx-auto"
         />
 
-        {/* Titel */}
-        <h1 className="text-2xl font-bold text-yellow-300 mb-4">Log In</h1>
-
-        {/* Fehler ausgeben */}
+        {/* Fehlermeldung */}
         {error && (
-          <p className="text-red-400 mb-4">
+          <p className="text-red-400 font-semibold">
             {error}
           </p>
         )}
 
         {/* Formular */}
-        <form onSubmit={onSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-left text-yellow-200 mb-1" htmlFor="email">
+            <label htmlFor="email" className="sr-only">
               E-Mail
             </label>
             <input
               id="email"
               type="email"
-              className="w-full px-3 py-2 rounded bg-gray-200 focus:outline-none"
+              placeholder="E-Mail"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              className="w-full px-4 py-2 rounded-md focus:outline-none"
             />
           </div>
-
           <div>
-            <label className="block text-left text-yellow-200 mb-1" htmlFor="password">
+            <label htmlFor="password" className="sr-only">
               Passwort
             </label>
             <input
               id="password"
               type="password"
-              className="w-full px-3 py-2 rounded bg-gray-200 focus:outline-none"
+              placeholder="Passwort"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              className="w-full px-4 py-2 rounded-md focus:outline-none"
             />
           </div>
-
           <button
             type="submit"
-            className="w-full py-2 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded"
+            className="w-full py-2 rounded-md bg-yellow-600 hover:bg-yellow-700 font-bold text-black"
           >
             LOG IN
           </button>
         </form>
 
-        {/* Link zum Registrieren */}
-        <p className="mt-4 text-yellow-200">
+        {/* Link zur Registrierung */}
+        <p className="text-white">
           Noch keinen Account?{" "}
-          <a href="/register" className="underline hover:text-yellow-400">
+          <a href="/register" className="underline text-yellow-400">
             Account erstellen
           </a>
         </p>
