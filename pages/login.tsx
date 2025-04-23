@@ -12,20 +12,18 @@ export default function LoginPage() {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setError("");
-    try {
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-      if (res.ok) {
-        router.push("/");
-      } else {
-        const data = await res.json();
-        setError(data.msg || "Login fehlgeschlagen");
-      }
-    } catch (err) {
-      setError("Netzwerkfehler");
+
+    const res = await fetch("/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (res.ok) {
+      router.push("/");
+    } else {
+      const data = await res.json();
+      setError(data.msg || "Login fehlgeschlagen");
     }
   }
 
@@ -34,35 +32,60 @@ export default function LoginPage() {
       className="min-h-screen flex items-center justify-center bg-cover bg-center"
       style={{ backgroundImage: 'url("/images/login-bg.jpg")' }}
     >
-      <div className="bg-black bg-opacity-50 p-8 rounded-lg max-w-sm w-full text-center space-y-6">
+      <div className="bg-black bg-opacity-60 p-8 rounded-lg max-w-sm w-full text-center space-y-6">
         {/* Logo */}
-        <div className="flex justify-center">
+        <div>
           <Image
             src="/images/login-logo.png"
             alt="Energiekrieg Logo"
-            width={300}
-            height={150}
+            width={200}
+            height={200}
+            className="mx-auto"
           />
         </div>
 
-        {error && (
-          <p className="text-red-400 font-semibold">{error}</p>
-        )}
+        {/* Fehlermeldung */}
+        {error && <p className="text-red-400">{error}</p>}
 
-        <form onSubmit={handleSubmit} className="space-y-4 text-left">
+        {/* Formular */}
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label
-              htmlFor="email"
-              className="block text-gold uppercase text-sm mb-1"
-            >
-              E-Mail
-            </label>
+            <label className="block text-gold font-semibold mb-1">E-MAIL</label>
             <input
-              id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 rounded bg-gray-800 text-white focus:outline-none"
+              required
+              placeholder="E-Mail"
+              className="w-full px-3 py-2 rounded bg-white bg-opacity-20 placeholder-gold text-white"
             />
           </div>
-         
+          <div>
+            <label className="block text-gold font-semibold mb-1">PASSWORD</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              placeholder="Password"
+              className="w-full px-3 py-2 rounded bg-white bg-opacity-20 placeholder-gold text-white"
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full py-2 bg-gold text-black font-bold rounded hover:bg-gold-dark"
+          >
+            LOG IN
+          </button>
+        </form>
+
+        <p className="text-white">
+          Noch keinen Account?{" "}
+          <a href="/register" className="underline">
+            Account erstellen
+          </a>
+        </p>
+      </div>
+    </div>
+  );
+}
