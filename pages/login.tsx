@@ -28,44 +28,45 @@ export default function LoginPage() {
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-cover bg-center"
-      style={{ backgroundImage: 'url("/images/login-bg.jpg")' }}
+      style={{ backgroundImage: "url('/images/login-bg.jpg')" }}
     >
       <div className="bg-black bg-opacity-50 p-8 rounded-lg max-w-sm w-full text-center space-y-6">
-        {/* Dein Logo */}
-        <Image
-          src="/images/login-logo.png"
-          alt="Energiekieg Logo"
-          width={300}
-          height={100}
-          className="mx-auto"
-        />
+        {/* Logo */}
+        <div className="flex justify-center">
+          <Image
+            src="/images/login-logo.png"
+            alt="Energiekrieg Logo"
+            width={300}
+            height={100}
+            unoptimized
+          />
+        </div>
 
-        {/* Das Formular */}
         <form onSubmit={handleSubmit} className="space-y-4">
-          {error && <p className="text-red-400">{error}</p>}
+          {error && <p className="text-red-500">{error}</p>}
           <input
             type="email"
             placeholder="E-Mail"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-2 rounded text-black"
+            className="w-full p-2 rounded border border-gray-300"
           />
           <input
             type="password"
             placeholder="Passwort"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-2 rounded text-black"
+            className="w-full p-2 rounded border border-gray-300"
           />
           <button
             type="submit"
-            className="w-full bg-yellow-600 hover:bg-yellow-700 text-black font-bold py-2 rounded"
+            className="w-full p-2 bg-yellow-600 text-black rounded font-bold"
           >
             LOG IN
           </button>
         </form>
 
-        <p>
+        <p className="text-white">
           Noch keinen Account?{" "}
           <a href="/register" className="underline">
             Account erstellen
