@@ -6,6 +6,7 @@
     "module": "esnext",
     "moduleResolution": "node",
     "jsx": "preserve",
+
     "strict": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
@@ -14,12 +15,14 @@
     "isolatedModules": true,
     "esModuleInterop": true,
 
-    /* ---------- Alias @/…  ---------- */
+    /* ---------- Alias '@/…' ---------- */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]          //  <-- ALIAS: '@/lib/…', '@/components/…' usw.
+      "@/*": ["./*"]
     }
   },
+
+  /* ---------- Nur Quell-Code,   NICHT die Build-Skripte ---------- */
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "scripts/**"]
 }
