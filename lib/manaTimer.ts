@@ -1,10 +1,10 @@
 /**
- * Präziser, pausierbarer Countdown-Timer (Millisekunden-genau).
+ * Präziser, pausierbarer Countdown-Timer.
  */
 export class ManaTimer {
   private durationMs: number;
   private readonly onExpire: () => void;
-  private readonly onTick?: (msLeft: number) => void;
+  private readonly onTick?: (ms: number) => void;
   private readonly tickInterval: number;
 
   private timerId: ReturnType<typeof setTimeout> | null = null;
@@ -13,18 +13,18 @@ export class ManaTimer {
   private startTs: number | null = null;
 
   constructor(
-    durationSeconds: number,
+    seconds: number,
     onExpire: () => void,
-    opts: { onTick?: (msLeft: number) => void; tickEveryMs?: number } = {},
+    opts: { onTick?: (ms: number) => void; tickEveryMs?: number } = {},
   ) {
-    this.durationMs   = durationSeconds * 1_000;
+    this.durationMs   = seconds * 1_000;
     this.remainingMs  = this.durationMs;
     this.onExpire     = onExpire;
     this.onTick       = opts.onTick;
     this.tickInterval = opts.tickEveryMs ?? 500;
   }
 
-  /* ---------- Steuerung ---------- */
+  /* ------- Steuerung ------- */
   start() {
     if (this.timerId) return;
     this.startTs = Date.now();
@@ -59,16 +59,29 @@ export class ManaTimer {
     this.startTs = null;
   }
 
-  /** Reset auf neue Dauer (oder ursprüngliche). */
-  reset(durationSeconds?: number) {
+  /** Reset auf neue oder ursprüngliche Dauer. */
+  reset(seconds?: number) {
     this.stop();
-    if (durationSeconds) {
-      this.durationMs  = durationSeconds * 1_000; // ← ZWEI separate Zuweisungen
+    if (seconds) {
+      this.durationMs  = seconds * 1_000;   // ← EINZEL-Zuweisungen
       this.remainingMs = this.durationMs;
     }
   }
 
-  /* ---------- Abfragen ---------- */
+  /* ------- Abfragen ------- */
   getRemainingMs(): number {
     return this.startTs
-      ? Math.max(0, this.remaining
+      ? Math.max(0, this.remainingMs - (Date.now() - this.startTs))
+      : this.remainingMs;
+  }
+
+  getRemainingSeconds(): number {
+    return Math.floor(this.getRemainingMs() / 1_000);
+  }
+
+  /* ------- intern ------- */
+  private handleExpire() {
+    this.stop();
+    this.onExpire();
+  }
+}
