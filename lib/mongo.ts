@@ -7,7 +7,7 @@ const options: any = {};
 let client: MongoClient;
 let db: Db;
 
-/** Liefert eine singleton-DB-Instanz (Serverless-freundlich) */
+/** Liefert eine Singleton-DB-Instanz (serverless-freundlich). */
 export async function getDb() {
   if (db) return db;
   client = client ?? new MongoClient(uri, options);
