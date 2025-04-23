@@ -1,100 +1,97 @@
-import { useState } from "react";
+// pages/login.tsx
+import { useState, FormEvent } from "react";
 import { useRouter } from "next/router";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [error, setError] = useState<string>("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  async function onSubmit(e: FormEvent) {
     e.preventDefault();
-    setError("");
+    setError(null);
 
     const res = await fetch("/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     });
-    const data = await res.json();
 
     if (res.ok) {
-      // Login erfolgreich: weiterleiten
+      // bei Erfolg weiter zum Dashboard / Home
       router.push("/");
     } else {
-      setError(data.msg || "E-Mail oder Passwort ungültig");
+      const { msg } = await res.json();
+      setError(msg || "Login fehlgeschlagen");
     }
-  };
+  }
 
   return (
     <div
       className="min-h-screen bg-cover bg-center flex items-center justify-center"
       style={{ backgroundImage: "url(/images/login-bg.jpg)" }}
     >
-      <div className="bg-black/70 p-8 rounded-xl shadow-xl max-w-sm w-full">
+      <div className="bg-black bg-opacity-60 p-8 rounded-lg max-w-sm w-full text-center">
         {/* Logo */}
         <img
           src="/images/login-logo.png"
           alt="Energiekrieg Logo"
-          className="mx-auto mb-6 w-48"
+          className="mx-auto mb-6 w-36"
         />
 
-        {/* Fehlermeldung */}
+        {/* Titel */}
+        <h1 className="text-2xl font-bold text-yellow-300 mb-4">Log In</h1>
+
+        {/* Fehler ausgeben */}
         {error && (
-          <p className="text-red-400 text-center mb-4">{error}</p>
+          <p className="text-red-400 mb-4">
+            {error}
+          </p>
         )}
 
-        {/* Login-Formular */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Formular */}
+        <form onSubmit={onSubmit} className="space-y-4">
           <div>
-            <label
-              htmlFor="email"
-              className="block text-yellow-300 font-semibold mb-1"
-            >
+            <label className="block text-left text-yellow-200 mb-1" htmlFor="email">
               E-Mail
             </label>
             <input
               id="email"
               type="email"
-              required
+              className="w-full px-3 py-2 rounded bg-gray-200 focus:outline-none"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 rounded-md bg-white/90 focus:outline-none"
+              required
             />
           </div>
 
           <div>
-            <label
-              htmlFor="password"
-              className="block text-yellow-300 font-semibold mb-1"
-            >
+            <label className="block text-left text-yellow-200 mb-1" htmlFor="password">
               Passwort
             </label>
             <input
               id="password"
               type="password"
-              required
+              className="w-full px-3 py-2 rounded bg-gray-200 focus:outline-none"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 rounded-md bg-white/90 focus:outline-none"
+              required
             />
           </div>
 
           <button
             type="submit"
-            className="w-full py-2 bg-yellow-500 hover:bg-yellow-600 text-white font-bold rounded-md"
+            className="w-full py-2 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded"
           >
             LOG IN
           </button>
         </form>
 
-        {/* Link zur Registrierung */}
-        <p className="mt-6 text-center text-sm text-white">
+        {/* Link zum Registrieren */}
+        <p className="mt-4 text-yellow-200">
           Noch keinen Account?{" "}
-          <a
-            href="/register"
-            className="text-yellow-400 hover:underline font-semibold"
-          >
+          <a href="/register" className="underline hover:text-yellow-400">
             Account erstellen
           </a>
         </p>
