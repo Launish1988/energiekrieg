@@ -1,53 +1,57 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 
-export default function RegisterPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPw] = useState("");
-  const [msg, setMsg] = useState("");
+export default function Register() {
+  const [email, setEmail]       = useState("");
+  const [password, setPassword] = useState("");
+  const [msg, setMsg]           = useState("");
   const router = useRouter();
 
-  async function handleSubmit(e: React.FormEvent) {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     const res = await fetch("/api/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email, password })
     });
+
     if (res.ok) {
-      router.push("/login");
+      setMsg("Erfolgreich! Du kannst dich jetzt einloggen.");
+      setTimeout(() => router.push("/login"), 1000);
     } else {
       const data = await res.json();
-      setMsg(data.msg || "Fehler");
+      setMsg(data.msg ?? "Fehler");
     }
-  }
+  };
 
   return (
-    <div className="flex flex-col items-center gap-4 pt-20">
+    <main className="flex flex-col items-center mt-10 gap-2">
       <h1 className="text-3xl font-bold">Account erstellen</h1>
-
-      <form onSubmit={handleSubmit} className="flex flex-col gap-3 w-72">
+      <form className="flex gap-2" onSubmit={submit}>
         <input
           type="email"
           placeholder="E-Mail"
-          required
-          className="p-2 rounded bg-neutral-800"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={e => setEmail(e.target.value)}
+          className="border px-2"
+          required
         />
         <input
           type="password"
           placeholder="Passwort"
-          required
-          className="p-2 rounded bg-neutral-800"
           value={password}
-          onChange={(e) => setPw(e.target.value)}
+          onChange={e => setPassword(e.target.value)}
+          className="border px-2"
+          required
         />
-        <button className="bg-amber-600 hover:bg-amber-700 p-2 rounded text-lg font-semibold">
+        <button className="border px-3 py-1 bg-amber-600 text-white">
           Registrieren
         </button>
-        {msg && <p className="text-red-400 text-sm">{msg}</p>}
       </form>
-    </div>
+      {msg && <p className="text-sm mt-4">{msg}</p>}
+      <a href="/login" className="underline text-sm mt-2">
+        Schon da? → Einloggen
+      </a>
+    </main>
   );
 }
