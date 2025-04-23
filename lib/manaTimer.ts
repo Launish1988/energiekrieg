@@ -1,9 +1,9 @@
 /**
- * Präziser, pausierbarer Countdown‑Timer (Millisekunden‑genau).
+ * Präziser, pausierbarer Countdown-Timer (Millisekunden-genau).
  *
- *  ✔ On‑Expire‑Callback
- *  ✔ Tick‑Callback (Standard = 500 ms) für UI‑Updates
- *  ✔ start / pause / resume / stop / reset
+ * ✔ On-Expire-Callback
+ * ✔ Tick-Callback (UI-Updates)
+ * ✔ start / pause / resume / stop / reset
  */
 export class ManaTimer {
   private durationMs: number;
@@ -21,20 +21,23 @@ export class ManaTimer {
     onExpire: () => void,
     opts: { onTick?: (msLeft: number) => void; tickEveryMs?: number } = {},
   ) {
-    this.durationMs = durationSeconds * 1_000;
-    this.remainingMs = this.durationMs;
-    this.onExpire = onExpire;
-    this.onTick = opts.onTick;
+    this.durationMs   = durationSeconds * 1_000;
+    this.remainingMs  = this.durationMs;
+    this.onExpire     = onExpire;
+    this.onTick       = opts.onTick;
     this.tickInterval = opts.tickEveryMs ?? 500;
   }
 
-  /* --------------- public API --------------- */
+  /* -------- public API -------- */
   start() {
-    if (this.timerId) return; // bereits laufend
+    if (this.timerId) return;                 // bereits laufend
     this.startTs = Date.now();
     this.timerId = setTimeout(() => this.handleExpire(), this.remainingMs);
     if (this.onTick) {
-      this.tickId = setInterval(() => this.onTick!(this.getRemainingMs()), this.tickInterval);
+      this.tickId = setInterval(
+        () => this.onTick!(this.getRemainingMs()),
+        this.tickInterval,
+      );
     }
   }
 
@@ -42,8 +45,7 @@ export class ManaTimer {
     if (!this.timerId || this.startTs === null) return;
     clearTimeout(this.timerId);
     if (this.tickId) clearInterval(this.tickId);
-    this.timerId = null;
-    this.tickId = null;
+    this.timerId = this.tickId = null;
     this.remainingMs -= Date.now() - this.startTs;
     this.startTs = null;
   }
@@ -56,19 +58,20 @@ export class ManaTimer {
   stop() {
     if (this.timerId) clearTimeout(this.timerId);
     if (this.tickId) clearInterval(this.tickId);
-    this.timerId = null;
-    this.tickId = null;
+    this.timerId = this.tickId = null;
     this.remainingMs = this.durationMs;
     this.startTs = null;
   }
 
+  /** ⬅️ Hier endet reset korrekt ⬇︎ */
   reset(durationSeconds?: number) {
     this.stop();
     if (durationSeconds) {
-  this.durationMs  = durationSeconds * 1_000;   // <- wieder beschreibbar machen
-  this.remainingMs = this.durationMs;
+      this.durationMs  = durationSeconds * 1_000;
+      this.remainingMs = this.durationMs;
+    }
   }
- }
+
   /** Millisekunden verbleibend (float). */
   getRemainingMs(): number {
     if (this.startTs) {
@@ -82,7 +85,7 @@ export class ManaTimer {
     return Math.floor(this.getRemainingMs() / 1_000);
   }
 
-  /* --------------- internal --------------- */
+  /* -------- internal -------- */
   private handleExpire() {
     this.stop();
     this.onExpire();
