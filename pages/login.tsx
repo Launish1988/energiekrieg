@@ -26,32 +26,29 @@ export default function LoginPage() {
 
   return (
     <div
-      className="relative min-h-screen bg-cover bg-center bg-no-repeat"
-      style={{
-        backgroundImage: 'url("/images/login-bg.jpg")',
-      }}
+      className="relative w-full h-screen bg-cover bg-center"
+      style={{ backgroundImage: 'url("/images/login-bg.jpg")' }}
     >
-      {/* Formularcontainer mit absolut positionierten Feldern */}
-      <form onSubmit={handleSubmit} className="absolute inset-0">
+      <form
+        onSubmit={handleSubmit}
+        className="absolute inset-0 flex flex-col items-center justify-center"
+      >
         {/* E-Mail-Feld */}
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder=""
+          placeholder="E-Mail"
           className="
-            absolute 
-            top-[40%]      /* hier nach oben/unten schieben */
-            left-[50%]     /* hier nach links/rechts schieben */
-            -translate-x-1/2
-            w-[300px]      /* Breite anpassen */
-            h-[30px]       /* Höhe anpassen */
-            bg-transparent 
-            border-none 
-            text-white 
-            text-center 
+            mb-4
+            w-80
+            px-3
+            py-2
+            bg-transparent
+            border-2 border-gold-500
+            text-gold-200
+            placeholder-gold-200
             focus:outline-none
-            focus:ring-0
           "
         />
 
@@ -60,20 +57,17 @@ export default function LoginPage() {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder=""
+          placeholder="Passwort"
           className="
-            absolute
-            top-[50%]
-            left-[50%]
-            -translate-x-1/2
-            w-[300px]
-            h-[30px]
+            mb-6
+            w-80
+            px-3
+            py-2
             bg-transparent
-            border-none
-            text-white
-            text-center
+            border-2 border-gold-500
+            text-gold-200
+            placeholder-gold-200
             focus:outline-none
-            focus:ring-0
           "
         />
 
@@ -81,42 +75,45 @@ export default function LoginPage() {
         <button
           type="submit"
           className="
-            absolute
-            top-[60%]
-            left-[50%]
-            -translate-x-1/2
-            w-[200px]
-            h-[40px]
-            bg-transparent
-            border-none
-            focus:outline-none
+            mb-4
+            w-60
+            px-4
+            py-2
+            bg-gold-600
+            text-black
+            font-bold
+            rounded
+            hover:bg-gold-700
           "
-        />
+        >
+          LOG IN
+        </button>
 
-        {/* Link zum Registrieren */}
+        {/* Create-Account-Button */}
         <button
           type="button"
           onClick={() => router.push("/register")}
           className="
-            absolute
-            top-[70%]
-            left-[50%]
-            -translate-x-1/2
-            w-[200px]
-            h-[40px]
-            bg-transparent
-            border-none
-            focus:outline-none
+            w-60
+            px-4
+            py-2
+            bg-gold-700
+            text-black
+            font-bold
+            rounded
+            hover:bg-gold-800
           "
-        />
-      </form>
+        >
+          CREATE ACCOUNT
+        </button>
 
-      {/* Optional: Fehlermeldung */}
-      {error && (
-        <div className="absolute top-[80%] left-[50%] -translate-x-1/2 text-red-400">
-          {error}
-        </div>
-      )}
+        {/* Fehlermeldung */}
+        {error && (
+          <p className="mt-4 text-red-400 font-medium text-center">
+            {error}
+          </p>
+        )}
+      </form>
     </div>
   );
 }
