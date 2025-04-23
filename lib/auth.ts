@@ -1,13 +1,32 @@
 // lib/auth.ts
 import bcrypt from "bcryptjs";
+import type { NextApiResponse } from "next";
 
-/** Hash ein Klartext-Passwort (10 Rounds). */
-export async function hashPassword(plain: string) {
-  const salt = await bcrypt.genSalt(10);
-  return bcrypt.hash(plain, salt);
+/** Passwörter sicher hashen (10 Salt-Rounds) */
+export async function hashPassword(raw: string) {
+  return bcrypt.hash(raw, 10);
 }
 
-/** Prüft plain gegen gespeicherten Hash. */
-export async function verifyPassword(plain: string, hash: string) {
-  return bcrypt.compare(plain, hash);
+/** Hash gegen Klartext-Passwort prüfen */
+export async function verifyPassword(raw: string, hash: string) {
+  return bcrypt.compare(raw, hash);
+}
+
+/** Login-Cookie setzen (14 Tage gültig) */
+export function setLoginCookie(res: NextApiResponse, email: string) {
+  res.setHeader(
+    "Set-Cookie",
+    `username=${encodeURIComponent(email)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${60 *
+      60 *
+      24 *
+      14}`,
+  );
+}
+
+/** Login-Cookie sofort löschen (Logout) */
+export function clearLoginCookie(res: NextApiResponse) {
+  res.setHeader(
+    "Set-Cookie",
+    "username=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0",
+  );
 }
