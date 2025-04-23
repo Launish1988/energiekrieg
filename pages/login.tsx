@@ -11,93 +11,90 @@ export default function LoginPage() {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setError("");
-    const res = await fetch("/api/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
-    if (res.ok) {
-      router.push("/");
-    } else {
-      const data = await res.json();
-      setError(data.msg || "Login fehlgeschlagen");
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      if (res.ok) {
+        router.push("/");
+      } else {
+        const data = await res.json();
+        setError(data.msg || "Login fehlgeschlagen");
+      }
+    } catch (err) {
+      setError("Netzwerkfehler");
     }
   }
 
   return (
     <div
-      className="relative w-full h-screen bg-cover bg-center"
+      className="relative w-screen h-screen"
       style={{
         backgroundImage: 'url("/images/login-bg.jpg")',
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        backgroundPosition: "center center",
       }}
     >
       <form onSubmit={handleSubmit} className="relative w-full h-full">
-        {/*
-          Input- und Button-Flächen werden absolut über
-          die Grafik gelegt. Du musst nur noch spielend
-          sehen, wo E-Mail / Passwort / Login / Create Account
-          auf dem Bild stehen.
-        */}
-
-        {/* E-Mail */}
+        {/* E-Mail Eingabe über dem goldenen Feld */}
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          // kein placeholder, das Label sitzt ja im Bild
-          placeholder=""
           className="
-            absolute 
-            top-[35%] left-1/2 transform -translate-x-1/2
+            absolute top-[36%] left-1/2 -translate-x-1/2
             w-[70%] max-w-xs h-10
-            bg-transparent text-gold-200
+            bg-transparent text-white placeholder-transparent
             border-none focus:outline-none
           "
         />
 
-        {/* Passwort */}
+        {/* Passwort Eingabe */}
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder=""
           className="
-            absolute 
-            top-[45%] left-1/2 transform -translate-x-1/2
+            absolute top-[46%] left-1/2 -translate-x-1/2
             w-[70%] max-w-xs h-10
-            bg-transparent text-gold-200
+            bg-transparent text-white placeholder-transparent
             border-none focus:outline-none
           "
         />
 
-        {/* Login-Button */}
+        {/* Login Button (deckungsgleich mit dem goldenen Button) */}
         <button
           type="submit"
           className="
-            absolute
-            top-[55%] left-1/2 transform -translate-x-1/2
+            absolute top-[56%] left-1/2 -translate-x-1/2
             w-[60%] max-w-xs h-12
             bg-transparent border-none
             cursor-pointer
           "
-        />
+        >
+          {/* Leer lassen – der sichtbare Button liegt im Hintergrundbild */}
+        </button>
 
-        {/* Create-Account-Button */}
+        {/* Create Account Button */}
         <button
           type="button"
           onClick={() => router.push("/register")}
           className="
-            absolute
-            top-[67%] left-1/2 transform -translate-x-1/2
+            absolute top-[68%] left-1/2 -translate-x-1/2
             w-[60%] max-w-xs h-12
             bg-transparent border-none
             cursor-pointer
           "
-        />
+        >
+          {/* Leer lassen */}
+        </button>
 
-        {/* (optional) Fehlermeldung unter dem Bild */}
+        {/* Fehlermeldung */}
         {error && (
-          <p className="absolute top-[80%] left-1/2 transform -translate-x-1/2 text-red-400">
+          <p className="absolute top-[80%] left-1/2 -translate-x-1/2 text-red-400">
             {error}
           </p>
         )}
