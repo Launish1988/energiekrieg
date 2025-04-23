@@ -12,11 +12,13 @@ export default function LoginPage() {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setError("");
+
     const res = await fetch("/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     });
+
     if (res.ok) {
       router.push("/");
     } else {
@@ -42,6 +44,7 @@ export default function LoginPage() {
           />
         </div>
 
+        {/* Formular */}
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && <p className="text-red-500">{error}</p>}
           <input
