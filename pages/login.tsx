@@ -26,50 +26,97 @@ export default function LoginPage() {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center bg-cover bg-center"
-      style={{ backgroundImage: 'url("/images/login-bg.jpg")' }}
+      className="relative min-h-screen bg-cover bg-center bg-no-repeat"
+      style={{
+        backgroundImage: 'url("/images/login-bg.jpg")',
+      }}
     >
-      <div className="bg-black bg-opacity-60 p-8 rounded-lg max-w-sm w-full text-center space-y-6">
-        {/* Logo */}
-        <img
-          src="/images/login-logo.png"
-          alt="Energiekrieg Logo"
-          className="mx-auto mb-4 w-64"
+      {/* Formularcontainer mit absolut positionierten Feldern */}
+      <form onSubmit={handleSubmit} className="absolute inset-0">
+        {/* E-Mail-Feld */}
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder=""
+          className="
+            absolute 
+            top-[40%]      /* hier nach oben/unten schieben */
+            left-[50%]     /* hier nach links/rechts schieben */
+            -translate-x-1/2
+            w-[300px]      /* Breite anpassen */
+            h-[30px]       /* Höhe anpassen */
+            bg-transparent 
+            border-none 
+            text-white 
+            text-center 
+            focus:outline-none
+            focus:ring-0
+          "
         />
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="email"
-            placeholder="E-Mail"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-2 rounded text-black"
-            required
-          />
-          <input
-            type="password"
-            placeholder="Passwort"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-2 rounded text-black"
-            required
-          />
-          {error && <p className="text-red-400">{error}</p>}
-          <button
-            type="submit"
-            className="w-full py-2 bg-yellow-600 hover:bg-yellow-700 rounded font-bold"
-          >
-            LOG IN
-          </button>
-        </form>
+        {/* Passwort-Feld */}
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder=""
+          className="
+            absolute
+            top-[50%]
+            left-[50%]
+            -translate-x-1/2
+            w-[300px]
+            h-[30px]
+            bg-transparent
+            border-none
+            text-white
+            text-center
+            focus:outline-none
+            focus:ring-0
+          "
+        />
 
-        <p className="text-sm">
-          Noch keinen Account?{" "}
-          <a href="/register" className="underline text-yellow-500">
-            Account erstellen
-          </a>
-        </p>
-      </div>
+        {/* Login-Button */}
+        <button
+          type="submit"
+          className="
+            absolute
+            top-[60%]
+            left-[50%]
+            -translate-x-1/2
+            w-[200px]
+            h-[40px]
+            bg-transparent
+            border-none
+            focus:outline-none
+          "
+        />
+
+        {/* Link zum Registrieren */}
+        <button
+          type="button"
+          onClick={() => router.push("/register")}
+          className="
+            absolute
+            top-[70%]
+            left-[50%]
+            -translate-x-1/2
+            w-[200px]
+            h-[40px]
+            bg-transparent
+            border-none
+            focus:outline-none
+          "
+        />
+      </form>
+
+      {/* Optional: Fehlermeldung */}
+      {error && (
+        <div className="absolute top-[80%] left-[50%] -translate-x-1/2 text-red-400">
+          {error}
+        </div>
+      )}
     </div>
   );
 }
