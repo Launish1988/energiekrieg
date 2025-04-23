@@ -6,7 +6,7 @@
  *  ✔ start / pause / resume / stop / reset
  */
 export class ManaTimer {
-  private readonly durationMs: number;
+  private durationMs: number;
   private readonly onExpire: () => void;
   private readonly onTick?: (msLeft: number) => void;
   private readonly tickInterval: number;
