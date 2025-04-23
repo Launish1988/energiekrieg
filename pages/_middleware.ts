@@ -12,11 +12,11 @@ export function middleware(request: NextRequest) {
 
   /* ---------- 1) Immer öffentlich ---------- */
   if (
-    pathname.startsWith("/_next") ||
-    pathname.startsWith("/static") ||
-    pathname === "/favicon.ico" ||
-    pathname === "/robots.txt" ||
-    pathname.startsWith("/api")
+    pathname.startsWith("/_next") ||          // Next-internes Bundling
+    pathname.startsWith("/static") ||         // eigene statische Dateien
+    pathname.endsWith("/favicon.ico") ||      // Favicon
+    pathname.endsWith("/robots.txt") ||       // robots.txt
+    pathname.startsWith("/api")               // alle API-Routen
   ) {
     return NextResponse.next();
   }
@@ -26,7 +26,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  /* ---------- 3) Auth-geschützt ---------- */
+  /* ---------- 3) Auth-geschützte Bereiche ---------- */
   const username = request.cookies.get("username");
   if (!username) {
     const loginUrl = request.nextUrl.clone();
