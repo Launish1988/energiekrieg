@@ -1,4 +1,3 @@
-// pages/api/login.ts
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getDb } from "@/lib/mongo";
 import { verifyPassword, setLoginCookie } from "@/lib/auth";
@@ -22,7 +21,6 @@ export default async function handler(
   const ok = await verifyPassword(password, user.password);
   if (!ok) return res.status(401).json({ msg: "Invalid credentials" });
 
-  // ✔ alles richtig – Cookie setzen & Erfolg melden
   setLoginCookie(res, email);
   return res.status(200).json({ msg: "OK" });
 }
