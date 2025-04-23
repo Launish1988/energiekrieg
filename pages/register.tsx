@@ -21,11 +21,8 @@ export default function RegisterPage() {
     });
 
     if (res.ok) {
-      setSuccess("Account erfolgreich angelegt! Du wirst in 2 Sek. weitergeleitet…");
-      // nach 2 Sekunden zurück zur Login-Seite
-      setTimeout(() => {
-        router.push("/login");
-      }, 2000);
+      setSuccess("Account erfolgreich angelegt! Du wirst in 2 Sek. zurückgeleitet…");
+      setTimeout(() => router.push("/login"), 2000);
     } else {
       const data = await res.json();
       setError(data.msg || "Registrierung fehlgeschlagen");
@@ -42,37 +39,53 @@ export default function RegisterPage() {
         <input
           type="email"
           value={email}
-          onChange={e => setEmail(e.target.value)}
-          className="absolute top-[35%] left-1/2 transform -translate-x-1/2
-                     w-[70%] max-w-xs h-10 bg-transparent text-white
-                     border-none focus:outline-none"
+          onChange={(e) => setEmail(e.target.value)}
+          className="
+            absolute 
+            top-[35%] left-1/2 transform -translate-x-1/2
+            w-[70%] max-w-xs h-10
+            bg-transparent text-white
+            border-none focus:outline-none
+          "
         />
 
         {/* Passwort */}
         <input
           type="password"
           value={password}
-          onChange={e => setPassword(e.target.value)}
-          className="absolute top-[45%] left-1/2 transform -translate-x-1/2
-                     w-[70%] max-w-xs h-10 bg-transparent text-white
-                     border-none focus:outline-none"
+          onChange={(e) => setPassword(e.target.value)}
+          className="
+            absolute 
+            top-[45%] left-1/2 transform -translate-x-1/2
+            w-[70%] max-w-xs h-10
+            bg-transparent text-white
+            border-none focus:outline-none
+          "
         />
 
         {/* Register-Button */}
         <button
           type="submit"
-          className="absolute top-[55%] left-1/2 transform -translate-x-1/2
-                     w-[60%] max-w-xs h-12 bg-transparent border-none
-                     cursor-pointer"
+          className="
+            absolute
+            top-[55%] left-1/2 transform -translate-x-1/2
+            w-[60%] max-w-xs h-12
+            bg-transparent border-none
+            cursor-pointer
+          "
         />
 
         {/* Zurück zum Login */}
         <button
           type="button"
           onClick={() => router.push("/login")}
-          className="absolute top-[67%] left-1/2 transform -translate-x-1/2
-                     w-[60%] max-w-xs h-12 bg-transparent border-none
-                     cursor-pointer"
+          className="
+            absolute
+            top-[67%] left-1/2 transform -translate-x-1/2
+            w-[60%] max-w-xs h-12
+            bg-transparent border-none
+            cursor-pointer
+          "
         />
 
         {error && (
