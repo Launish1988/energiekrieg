@@ -30,48 +30,59 @@ export default function LoginPage() {
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-cover bg-center"
-      style={{ backgroundImage: "url('/images/login-bg.jpg')" }}
+      style={{
+        backgroundImage: `url("/images/login-bg.jpg")`,
+      }}
     >
       <div className="bg-black bg-opacity-50 p-8 rounded-lg max-w-sm w-full text-center space-y-6">
-        {/* Logo */}
-        <div className="flex justify-center">
+        {/* Logo oben */}
+        <div className="mx-auto w-48 h-auto">
           <Image
             src="/images/login-logo.png"
             alt="Energiekrieg Logo"
             width={300}
-            height={100}
-            unoptimized
+            height={150}
           />
         </div>
 
         {/* Formular */}
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label htmlFor="email" className="block text-gold mb-1">
+              E-Mail
+            </label>
+            <input
+              id="email"
+              type="email"
+              className="w-full p-2 rounded bg-gray-800 text-white"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div>
+            <label htmlFor="password" className="block text-gold mb-1">
+              Passwort
+            </label>
+            <input
+              id="password"
+              type="password"
+              className="w-full p-2 rounded bg-gray-800 text-white"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
           {error && <p className="text-red-500">{error}</p>}
-          <input
-            type="email"
-            placeholder="E-Mail"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-2 rounded border border-gray-300"
-          />
-          <input
-            type="password"
-            placeholder="Passwort"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-2 rounded border border-gray-300"
-          />
           <button
             type="submit"
-            className="w-full p-2 bg-yellow-600 text-black rounded font-bold"
+            className="w-full py-2 rounded bg-gold text-black font-bold"
           >
             LOG IN
           </button>
         </form>
 
-        <p className="text-white">
+        <p className="text-gray-300">
           Noch keinen Account?{" "}
-          <a href="/register" className="underline">
+          <a href="/register" className="underline text-gold">
             Account erstellen
           </a>
         </p>
